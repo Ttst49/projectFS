@@ -15,13 +15,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[Groups(["artist"])]
+    #[Groups(["artist","user"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(["artist"])]
+    #[Groups(["artist","user"])]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -38,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
 
+    #[Groups(["user"])]
     #[ORM\OneToOne(mappedBy: 'relatedTo', cascade: ['persist', 'remove'])]
     private ?Profile $profile = null;
 

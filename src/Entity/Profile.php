@@ -12,21 +12,21 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
 {
-    #[Groups(["artist"])]
+    #[Groups(["artist","user"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(["artist"])]
+    #[Groups(["artist","user"])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(["artist"])]
+    #[Groups(["artist","user"])]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
-    #[Groups(["artist"])]
+    #[Groups(["artist","user"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
