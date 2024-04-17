@@ -25,7 +25,7 @@ class VenueController extends AbstractController
         return $this->json($response);
     }
 
-    #[Route("/show/{id}")]
+    #[Route("/show/{id}",name: "app_venue_show")]
     public function showOne(Venue $venue):Response{
         $response = [
             "content"=>$venue,
@@ -34,7 +34,7 @@ class VenueController extends AbstractController
         return $this->json($response,200,[],["groups"=>"venue"]);
     }
 
-    #[Route("/create")]
+    #[Route("/create", name: "app_venue_create")]
     public function createOne(SerializerInterface $serializer,Request $request, EntityManagerInterface $manager):Response{
         $newVenue = $serializer->deserialize($request->getContent(),Venue::class,"json");
         $newVenue->setOwner($this->getUser()->getProfile());
@@ -70,6 +70,6 @@ class VenueController extends AbstractController
             "content" => "you successfully removed the venue",
             "code"=>200
         ];
-        return $this->json($response,);
+        return $this->json($response);
     }
 }
