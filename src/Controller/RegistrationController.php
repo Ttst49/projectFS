@@ -66,7 +66,7 @@ class RegistrationController extends AbstractController
         $manager->flush();
 
         $response = [
-            "content"=> "The user ".$user->getUsername()." has been created",
+            "content"=> "The user ".$user->getEmail()." has been created",
             "status"=>201,
             "user"=>$user
         ];

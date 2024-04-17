@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProfileRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +28,12 @@ class Profile
     #[ORM\OneToOne(inversedBy: 'profile', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $relatedTo = null;
+
+    /**
+     * @var Collection<int, Venue>
+     */
+    #[ORM\OneToMany(targetEntity: Venue::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $venues;
 
     public function getId(): ?int
     {
@@ -84,5 +92,36 @@ class Profile
         $this->createdAt = new \DateTime();
         $this->name = "not defined yet";
         $this->lastName = "not defined yet";
+        $this->venues = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection<int, Venue>
+     */
+    public function getVenues(): Collection
+    {
+        return $this->venues;
+    }
+
+    public function addVenue(Venue $venue): static
+    {
+        if (!$this->venues->contains($venue)) {
+            $this->venues->add($venue);
+            $venue->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVenue(Venue $venue): static
+    {
+        if ($this->venues->removeElement($venue)) {
+            // set the owning side to null (unless already changed)
+            if ($venue->getOwner() === $this) {
+                $venue->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
