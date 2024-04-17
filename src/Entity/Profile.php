@@ -7,24 +7,30 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
 {
+    #[Groups(["artist"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(["artist"])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(["artist"])]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[Groups(["artist"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[Groups(["artist"])]
     #[ORM\OneToOne(inversedBy: 'profile', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $relatedTo = null;
@@ -46,6 +52,9 @@ class Profile
      */
     #[ORM\OneToMany(targetEntity: Donation::class, mappedBy: 'artist', orphanRemoval: true)]
     private Collection $donations;
+
+    #[ORM\Column(length: 255)]
+    private ?string $role = null;
 
     public function getId(): ?int
     {
@@ -101,6 +110,7 @@ class Profile
     }
 
     public function __construct(){
+        $this->role = "spectator";
         $this->createdAt = new \DateTime();
         $this->name = "not defined yet";
         $this->lastName = "not defined yet";
@@ -195,6 +205,18 @@ class Profile
                 $donation->setArtist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }
