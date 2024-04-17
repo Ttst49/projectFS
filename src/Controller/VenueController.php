@@ -60,4 +60,16 @@ class VenueController extends AbstractController
         ];
         return $this->json($response,200,[],["groups"=>"venue"]);
     }
+
+    #[Route("/remove/{id}",name: "venue_remove")]
+    public function removeOne(Venue $venue, EntityManagerInterface $manager):Response{
+
+        $manager->remove($venue);
+        $manager->flush();
+        $response = [
+            "content" => "you successfully removed the venue",
+            "code"=>200
+        ];
+        return $this->json($response,);
+    }
 }
