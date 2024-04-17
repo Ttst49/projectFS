@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route("/api/ticket")]
 class TicketController extends AbstractController
 {
-    #[Route('/index', name: 'app_ticket')]
+    #[Route('/index', name: 'app_ticket_index')]
     public function index(TicketRepository $repository): Response
     {
         $tickets = $repository->findBy(["owner"=>$this->getUser()->getProfile()]);
@@ -22,7 +22,7 @@ class TicketController extends AbstractController
         return $this->json($response);
     }
 
-    #[Route("/show/{id}")]
+    #[Route("/show/{id}",name: "app_ticket_show")]
     public function showOne(Ticket $ticket):Response{
         $response = [
             "content"=>$ticket,

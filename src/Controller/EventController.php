@@ -21,7 +21,7 @@ class EventController extends AbstractController
         return $this->json($response);
     }
 
-    #[Route("/show/{id}")]
+    #[Route("/show/{id}", name: "app_event_show")]
     public function showOne(Event $event):Response{
         $response = [
             "content"=>$event,
