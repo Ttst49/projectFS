@@ -56,6 +56,18 @@ class Profile
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'artists')]
+    private Collection $eventsAsArtist;
+
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'spectators')]
+    private Collection $eventAsSpectator;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,6 +129,8 @@ class Profile
         $this->venues = new ArrayCollection();
         $this->tickets = new ArrayCollection();
         $this->donations = new ArrayCollection();
+        $this->eventsAsArtist = new ArrayCollection();
+        $this->eventAsSpectator = new ArrayCollection();
     }
 
     /**
@@ -217,6 +231,57 @@ class Profile
     public function setRole(string $role): static
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEventsAsArtist(): Collection
+    {
+        return $this->eventsAsArtist;
+    }
+
+    public function addEventsAsArtist(Event $eventsAsArtist): static
+    {
+        if (!$this->eventsAsArtist->contains($eventsAsArtist)) {
+            $this->eventsAsArtist->add($eventsAsArtist);
+            $eventsAsArtist->addArtist($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventsAsArtist(Event $eventsAsArtist): static
+    {
+        if ($this->eventsAsArtist->removeElement($eventsAsArtist)) {
+            $eventsAsArtist->removeArtist($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEventAsSpectator(): Collection
+    {
+        return $this->eventAsSpectator;
+    }
+
+    public function addEventAsSpectator(Event $eventAsSpectator): static
+    {
+        if (!$this->eventAsSpectator->contains($eventAsSpectator)) {
+            $this->eventAsSpectator->add($eventAsSpectator);
+        }
+
+        return $this;
+    }
+
+    public function removeEventAsSpectator(Event $eventAsSpectator): static
+    {
+        $this->eventAsSpectator->removeElement($eventAsSpectator);
 
         return $this;
     }
