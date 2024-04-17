@@ -30,7 +30,7 @@ class Profile
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[Groups(["artist"])]
+    #[Groups(["artist","venue"])]
     #[ORM\OneToOne(inversedBy: 'profile', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $relatedTo = null;

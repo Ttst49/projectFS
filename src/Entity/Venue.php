@@ -7,31 +7,39 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: VenueRepository::class)]
 class Venue
 {
+    #[Groups(["venue"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(["venue"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 
+    #[Groups(["venue"])]
     #[ORM\ManyToOne(inversedBy: 'venues')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Profile $owner = null;
 
+    #[Groups(["venue"])]
     #[ORM\Column]
     private ?int $SIRET = null;
 
+    #[Groups(["venue"])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(["venue"])]
     #[ORM\Column]
     private ?int $seatCapacity = null;
 
+    #[Groups(["venue"])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -43,6 +51,7 @@ class Venue
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->events = new ArrayCollection();
     }
 

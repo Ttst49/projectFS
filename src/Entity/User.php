@@ -21,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(["artist","user"])]
+    #[Groups(["artist","user","venue"])]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
