@@ -35,6 +35,18 @@ class Profile
     #[ORM\OneToMany(targetEntity: Venue::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $venues;
 
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $tickets;
+
+    /**
+     * @var Collection<int, Donation>
+     */
+    #[ORM\OneToMany(targetEntity: Donation::class, mappedBy: 'artist', orphanRemoval: true)]
+    private Collection $donations;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,6 +105,8 @@ class Profile
         $this->name = "not defined yet";
         $this->lastName = "not defined yet";
         $this->venues = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
+        $this->donations = new ArrayCollection();
     }
 
     /**
@@ -119,6 +133,66 @@ class Profile
             // set the owning side to null (unless already changed)
             if ($venue->getOwner() === $this) {
                 $venue->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): static
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets->add($ticket);
+            $ticket->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): static
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getOwner() === $this) {
+                $ticket->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Donation>
+     */
+    public function getDonations(): Collection
+    {
+        return $this->donations;
+    }
+
+    public function addDonation(Donation $donation): static
+    {
+        if (!$this->donations->contains($donation)) {
+            $this->donations->add($donation);
+            $donation->setArtist($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDonation(Donation $donation): static
+    {
+        if ($this->donations->removeElement($donation)) {
+            // set the owning side to null (unless already changed)
+            if ($donation->getArtist() === $this) {
+                $donation->setArtist(null);
             }
         }
 
