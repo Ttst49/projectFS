@@ -53,6 +53,7 @@ class Profile
     #[ORM\OneToMany(targetEntity: Donation::class, mappedBy: 'artist', orphanRemoval: true)]
     private Collection $donations;
 
+    #[Groups(["user"])]
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
