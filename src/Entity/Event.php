@@ -53,6 +53,10 @@ class Event
     #[ORM\ManyToMany(targetEntity: Profile::class, mappedBy: 'eventAsSpectator')]
     private Collection $spectators;
 
+    #[ORM\ManyToOne(inversedBy: 'eventsAsOwner')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Profile $owner = null;
+
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
@@ -214,6 +218,18 @@ class Event
         if ($this->spectators->removeElement($spectator)) {
             $spectator->removeEventAsSpectator($this);
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?Profile
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?Profile $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

@@ -68,6 +68,18 @@ class Profile
     #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'spectators')]
     private Collection $eventAsSpectator;
 
+    /**
+     * @var Collection<int, Event>
+     */
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $eventsAsOwner;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followedArtists')]
+    private Collection $followedArtists;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -131,6 +143,8 @@ class Profile
         $this->donations = new ArrayCollection();
         $this->eventsAsArtist = new ArrayCollection();
         $this->eventAsSpectator = new ArrayCollection();
+        $this->eventsAsOwner = new ArrayCollection();
+        $this->followedArtists = new ArrayCollection();
     }
 
     /**
@@ -282,6 +296,60 @@ class Profile
     public function removeEventAsSpectator(Event $eventAsSpectator): static
     {
         $this->eventAsSpectator->removeElement($eventAsSpectator);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEventsAsOwner(): Collection
+    {
+        return $this->eventsAsOwner;
+    }
+
+    public function addEventsAsOwner(Event $eventsAsOwner): static
+    {
+        if (!$this->eventsAsOwner->contains($eventsAsOwner)) {
+            $this->eventsAsOwner->add($eventsAsOwner);
+            $eventsAsOwner->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventsAsOwner(Event $eventsAsOwner): static
+    {
+        if ($this->eventsAsOwner->removeElement($eventsAsOwner)) {
+            // set the owning side to null (unless already changed)
+            if ($eventsAsOwner->getOwner() === $this) {
+                $eventsAsOwner->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFollowedArtists(): Collection
+    {
+        return $this->followedArtists;
+    }
+
+    public function addFollowedArtist(self $followedArtist): static
+    {
+        if (!$this->followedArtists->contains($followedArtist)) {
+            $this->followedArtists->add($followedArtist);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowedArtist(self $followedArtist): static
+    {
+        $this->followedArtists->removeElement($followedArtist);
 
         return $this;
     }
