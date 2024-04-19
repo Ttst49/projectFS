@@ -7,31 +7,39 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
+    #[Groups("event")]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups("event")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[Groups("event")]
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Venue $Venue = null;
 
+    #[Groups("event")]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Groups("event")]
     #[ORM\Column]
     private ?float $price = null;
 
+    #[Groups("event")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    #[Groups("event")]
     #[ORM\Column]
     private ?int $duration = null;
 
@@ -44,12 +52,14 @@ class Event
     /**
      * @var Collection<int, Profile>
      */
-    #[ORM\ManyToMany(targetEntity: Profile::class, inversedBy: 'eventsAsArtist')]
+    #[Groups("event")]
+    #[ORM\ManyToMany(targetEntity: Profile::class, inversedBy: 'eventsAsArtist', cascade: ['persist'])]
     private Collection $artists;
 
     /**
      * @var Collection<int, Profile>
      */
+    #[Groups("event")]
     #[ORM\ManyToMany(targetEntity: Profile::class, mappedBy: 'eventAsSpectator')]
     private Collection $spectators;
 
@@ -59,6 +69,7 @@ class Event
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->tickets = new ArrayCollection();
         $this->artists = new ArrayCollection();
         $this->spectators = new ArrayCollection();
@@ -233,4 +244,6 @@ class Event
 
         return $this;
     }
+
+
 }

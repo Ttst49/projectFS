@@ -8,7 +8,6 @@ security:
                 property: email
     firewalls:
 
-
         login:
             pattern: ^/api/login
             stateless: true
@@ -24,13 +23,6 @@ security:
             stateless: false
             jwt: ~
 
-
-
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-
         main:
             lazy: true
             provider: app_user_provider
@@ -38,9 +30,15 @@ security:
             logout:
                 path: app_logout
 
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+
+
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/api, roles: ROLE_USER }
 
 when@test:
     security:

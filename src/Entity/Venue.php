@@ -12,13 +12,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: VenueRepository::class)]
 class Venue
 {
-    #[Groups(["venue"])]
+    #[Groups(["venue","event"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(["venue"])]
+    #[Groups(["venue","event"])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $address = null;
 

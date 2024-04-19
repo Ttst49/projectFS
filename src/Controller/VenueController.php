@@ -15,14 +15,26 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route("/api/venue")]
 class VenueController extends AbstractController
 {
-    #[Route('/index', name: 'app_venue_index')]
-    public function index(VenueRepository $repository): Response
+    #[Route('/all', name: 'app_venue_all')]
+    public function getAll(VenueRepository $repository): Response
     {
         $response = [
             "content"=>$repository->findAll(),
             "code"=>200
         ];
-        return $this->json($response);
+        return $this->json($response,200,[],["groups"=>"venue"]);
+    }
+
+
+
+    #[Route('/index', name: 'app_venue_index')]
+    public function index(VenueRepository $repository): Response
+    {
+        $response = [
+            "content"=>$repository->findBy(["owner"=>$this->getUser()->getProfile()]),
+            "code"=>200
+        ];
+        return $this->json($response,200,[],["groups"=>"venue"]);
     }
 
     #[Route("/show/{id}",name: "app_venue_show")]

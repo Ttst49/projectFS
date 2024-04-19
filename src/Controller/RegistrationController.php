@@ -61,6 +61,9 @@ class RegistrationController extends AbstractController
         );
         $profile = new Profile();
         $user->setProfile($profile);
+        if ($parameters["role"]){
+            $profile->setRole($parameters["role"]);
+        }
 
         $manager->persist($user);
         $manager->flush();
