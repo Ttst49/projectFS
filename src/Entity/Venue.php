@@ -31,11 +31,11 @@ class Venue
     #[ORM\Column]
     private ?int $SIRET = null;
 
-    #[Groups(["venue"])]
+    #[Groups(["venue","event"])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Groups(["venue"])]
+    #[Groups(["venue","event"])]
     #[ORM\Column]
     private ?int $seatCapacity = null;
 
