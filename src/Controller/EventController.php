@@ -24,7 +24,7 @@ class EventController extends AbstractController
             "content" => $repository->findAll(),
             "code"=>200,
         ];
-        return $this->json($response);
+        return $this->json($response,200,[],["groups"=>"event"]);
     }
 
     #[Route("/show/{id}", name: "app_event_show")]
